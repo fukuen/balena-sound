@@ -9,7 +9,11 @@ load-module module-null-sink sink_name=snapcast
 # balena-sound.input: For multiroom it's routed to snapcast sink, for standalone directly wired to balena-sound.output
 # balena-sound.output: Set to audio sink specified by audio block
 load-module module-loopback latency_msec=%INPUT_LATENCY% source="balena-sound.input.monitor" %INPUT_SINK%
-load-module module-loopback latency_msec=%OUTPUT_LATENCY% source="balena-sound.output.monitor" %OUTPUT_SINK%
+#load-module module-loopback latency_msec=%OUTPUT_LATENCY% source="balena-sound.output.monitor" %OUTPUT_SINK%
+#tumbler
+load-module module-loopback latency_msec=%OUTPUT_LATENCY% source="balena-sound.output.monitor" alsa_output.1.stereo-fallback
 
 # Route all plugin input to the default sink
-set-default-sink balena-sound.input
+#set-default-sink balena-sound.input
+#tumbler
+set-default-sink alsa_output.1.stereo-fallback

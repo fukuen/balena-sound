@@ -71,6 +71,17 @@ function reset_sound_config() {
   cp "$CONFIG_TEMPLATE" "$CONFIG_FILE"
 }
 
+# for Tumbler
+set +e
+echo 30 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio30/direction
+echo 0 > /sys/class/gpio/gpio30/value
+echo 25 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio25/direction
+echo 0 > /sys/class/gpio/gpio25/value
+/bin/stty --file /dev/ttyAMA0 -hupcl
+set -e
+
 # Wait for sound supervisor to start
 SOUND_SUPERVISOR="$(ip route | awk '/default / { print $3 }')"
 while ! curl --silent --output /dev/null "$SOUND_SUPERVISOR/ping"; do sleep 5; echo "Waiting for sound supervisor to start"; done
